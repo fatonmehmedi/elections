@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,119 +10,125 @@
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <h2>Parliamentary Elections Calculator</h2>
     <div class="hidden-print">
         <label for="nr-of-zones">Number of zones:</label>
         <select id="nr-of-zones"></select>
         <label for="nr-of-party">Number of parties:</label>
         <select id="nr-of-party"></select>
         <label for="nr-of-deputies">Number of parties:</label>
-        <input type="text" id="nr-of-deputies" value="20"/>
+        <input type="text" id="nr-of-deputies" value="20" />
 
         <input type="button" class="btn btn-info" value="Print" onclick="window.print()">
     </div>
     <div id="zones" class="row">
     </div>
-</body>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <a id="ribbon" href="https://github.com/fatonmehmedi/-elections">
+        <img style="position: absolute; top: 0; right: 0; width: 120px; height: 120px; border: 0;"
+             src="http://aral.github.com/fork-me-on-github-retina-ribbons/right-green@2x.png"
+             alt="Fork me on GitHub">
+    </a>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-<script>
-    $(function () {
-        var changeFunction;
-        var zones = $('#zones');
-        var maxDeputy = 20;
-        var nrZones = 6;
-        var zonesDropdown = $('#nr-of-zones');
-        var nrParty = 10;
-        var nrPartyDropdown = $('#nr-of-party');
-        var zoneHTML = '<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2"><h3>{0}</h3><div class="zone"></div> <br /> <span id="minDeputyValue"></span> </div>';
-        var createParty, createZones;
+    <script>
+        $(function () {
+            var changeFunction;
+            var zones = $('#zones');
+            var maxDeputy = 20;
+            var nrZones = 6;
+            var zonesDropdown = $('#nr-of-zones');
+            var nrParty = 10;
+            var nrPartyDropdown = $('#nr-of-party');
+            var zoneHTML = '<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2"><h3>{0}</h3><div class="zone"></div> <br /> <span id="minDeputyValue"></span> </div>';
+            var createParty, createZones;
 
-        for (var i = 1; i < 50; i++) {
-            nrPartyDropdown.append('<option value="' + i + '">' + i + '</option>');
-            zonesDropdown.append('<option value="' + i + '">' + i + '</option>');
-        }
-
-        createParty = function () {
-            selected = nrPartyDropdown.val();
-            $(".zone").each(function (index) {
-                var zone = $(this);
-                for (var i = 0; i < selected; i++)
-                    zone.append('<div class="input-group" style="margin-bottom:5px;margin-left:5px;">' +
-  '<span class="input-group-addon">' + (i + 1) + ':</span>' +
-  '<input type="text" id="' + i + '" value="0" class="form-control">' +
-  '<span id="v' + i + '" class="input-group-addon"></span>' +
-'</div>');
-                zone.append('<div  id="minDeputyValue">&nbsp;</div>' +
-                    '<button class="calc btn btn-default hidden-print">Calculate</button>');
-            });
-        };
-
-        createZones = function () {
-            nrZones = zonesDropdown.val();
-            zones.empty();
-            for (var i = 0; i < nrZones; i++) {
-                zones.append(zoneHTML.replace('{0}','Zone ' + (i + 1)) );
+            for (var i = 1; i < 50; i++) {
+                nrPartyDropdown.append('<option value="' + i + '">' + i + '</option>');
+                zonesDropdown.append('<option value="' + i + '">' + i + '</option>');
             }
-            createParty();
-        };
-        zones.delegate("input[type='text']", 'click',function () {
-            $(this).select();
-        });
+
+            createParty = function () {
+                selected = nrPartyDropdown.val();
+                $(".zone").each(function (index) {
+                    var zone = $(this);
+                    for (var i = 0; i < selected; i++)
+                        zone.append('<div class="input-group" style="margin-bottom:5px;margin-left:5px;">' +
+      '<span class="input-group-addon">' + (i + 1) + ':</span>' +
+      '<input type="text" id="' + i + '" value="0" class="form-control">' +
+      '<span id="v' + i + '" class="input-group-addon"></span>' +
+    '</div>');
+                    zone.append('<div  id="minDeputyValue">&nbsp;</div>' +
+                        '<button class="calc btn btn-default hidden-print">Calculate</button>');
+                });
+            };
+
+            createZones = function () {
+                nrZones = zonesDropdown.val();
+                zones.empty();
+                for (var i = 0; i < nrZones; i++) {
+                    zones.append(zoneHTML.replace('{0}', 'Zone ' + (i + 1)));
+                }
+                createParty();
+            };
+            zones.delegate("input[type='text']", 'click', function () {
+                $(this).select();
+            });
 
 
-        zones.delegate('.calc', 'focus', function () {
-            var parent = $(this).parent();
-            var x = new Array(selected);
-            var deputyList = new Array(selected);
-            for (var i = 0; i < selected; i++) {
-                deputyList[i] = 0;
-                x[i] = new Array(maxDeputy);
-                var partyVotes = parent.find('#' + i).val();
-                for (var j = 0; j < maxDeputy; j++) {
-                    x[i][j] = partyVotes / (j + 1);
+            zones.delegate('.calc', 'focus', function () {
+                var parent = $(this).parent();
+                var x = new Array(selected);
+                var deputyList = new Array(selected);
+                for (var i = 0; i < selected; i++) {
+                    deputyList[i] = 0;
+                    x[i] = new Array(maxDeputy);
+                    var partyVotes = parent.find('#' + i).val();
+                    for (var j = 0; j < maxDeputy; j++) {
+                        x[i][j] = partyVotes / (j + 1);
+                    }
+
+                    var partyMaxIndex = 0;
                 }
 
-                var partyMaxIndex = 0;
-            }
-
-            var maxValue;
-            var maxPartyIndex;
-            for (var k = 0; k < maxDeputy; k++) {
-                maxValue = 0;
-                maxPartyIndex = 0;
-                var maxPartyIndexI = 0;
-                var maxPartyIndexJ = 0;
-                for (var i = 0; i < selected; i++) {
-                    for (var j = 0; j < maxDeputy; j++) {
-                        if (maxValue < x[i][j]) {
-                            maxValue = x[i][j];
-                            maxPartyIndexI = i;
-                            maxPartyIndexJ = j;
+                var maxValue;
+                var maxPartyIndex;
+                for (var k = 0; k < maxDeputy; k++) {
+                    maxValue = 0;
+                    maxPartyIndex = 0;
+                    var maxPartyIndexI = 0;
+                    var maxPartyIndexJ = 0;
+                    for (var i = 0; i < selected; i++) {
+                        for (var j = 0; j < maxDeputy; j++) {
+                            if (maxValue < x[i][j]) {
+                                maxValue = x[i][j];
+                                maxPartyIndexI = i;
+                                maxPartyIndexJ = j;
+                            }
                         }
                     }
+
+                    deputyList[maxPartyIndexI] = deputyList[maxPartyIndexI] + 1;
+                    x[maxPartyIndexI][maxPartyIndexJ] = 0;
                 }
 
-                deputyList[maxPartyIndexI] = deputyList[maxPartyIndexI] + 1;
-                x[maxPartyIndexI][maxPartyIndexJ] = 0;
-            }
+                for (var i = 0; i < selected; i++) {
+                    parent.find('#v' + i).text(deputyList[i]);
+                }
+                parent.find('#minDeputyValue').text('Last deputy -> party: ' + (maxPartyIndex + 1) + ' votes:' + Math.round(maxValue));
 
-            for (var i = 0; i < selected; i++) {
-                parent.find('#v' + i).text(deputyList[i]);
-            }
-            parent.find('#minDeputyValue').text('Last deputy -> party: ' + (maxPartyIndex + 1) + ' votes:' + Math.round(maxValue));
+            });
 
+            nrPartyDropdown.val(nrParty);
+            zonesDropdown.val(nrZones)
+
+            nrPartyDropdown.change(createZones);
+            zonesDropdown.change(createZones);
+            $('#nr-of-deputies').change(function () {
+                maxDeputy = $('#nr-of-deputies').val();
+            })
+            createZones();
         });
-        
-        nrPartyDropdown.val(nrParty);
-        zonesDropdown.val(nrZones)
-
-        nrPartyDropdown.change(createZones);
-        zonesDropdown.change(createZones);
-        $('#nr-of-deputies').change(function () {
-            maxDeputy = $('#nr-of-deputies').val();
-        })
-        createZones();
-    });
-</script>
+    </script>
+</body>
 </html>

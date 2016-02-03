@@ -81,7 +81,7 @@
                 $(this).val($(this).val().replace(/[^0-9]/ig, ''));  // keep only numbers
             });
 
-            zones.delegate('.calc', 'focus', function () {
+            zones.delegate('.calc', 'click', function () {
                 var parent = $(this).parent();
                 var x = new Array(selected);
                 var deputyList = new Array(selected);
